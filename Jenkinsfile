@@ -11,19 +11,12 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
-        stage('Test') {
+        stage('SonarQube Analysis') {
             steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
+                    def mvn = tool 'Default Maven';
+                    withSonarQubeEnv() {
+                    sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=demo"
                 }
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
             }
         }
     }
