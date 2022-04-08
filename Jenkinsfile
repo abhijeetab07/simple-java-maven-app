@@ -6,13 +6,10 @@ pipeline {
         }
     }
     stages {
-          stage('SonarQube Analysis') {
-              steps {
-                    def scannerHome = tool 'SonarScanner';
-                    withSonarQubeEnv() {
-                    sh "${scannerHome}/bin/sonar-scanner"
-          }
+        stage('Build') { 
+            steps {
+                sh 'mvn -B -DskipTests clean package' 
+            }
         }
-      }
     }
 }
